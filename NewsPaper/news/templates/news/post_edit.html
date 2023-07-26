@@ -1,0 +1,86 @@
+{% load static %}
+
+{% block MyCss %}
+<title> Create </title>
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+<script
+  src="https://code.jquery.com/jquery-3.6.2.min.js"
+  integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA="
+  crossorigin="anonymous"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<style>
+
+.btn:link,
+.btn:visited {
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 15px 40px;
+    display: inline-block;
+    border-radius: 100px;
+    transition: all .2s;
+    position: absolute;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-white {
+    background-color: #AFEEEE;
+    color: black;
+}
+
+.btn::after {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+    position: absolute;
+</style>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapseMenu">
+          <span class="icon-bar">Меню</span>
+        </button>
+      </div>
+      <div class="collapse" id="collapseMenu" >
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="https://apps.skillfactory.ru/" target="_blank">Учебная Платформа</a></li>
+          <li><a href=../authors/>Авторы</a></li>
+        </ul>
+      </div>
+    </div>
+</div>
+<div id="headerwrap">
+<div class="container">
+  <div class="row centered" style= "width: 1710px;">
+    <div class="col-lg-8 col-lg-offset-2">
+      <h1>Создание/Редактирование</h1>
+    </div>
+  </div>
+</div>
+</div>
+<br>
+<div class="container wb">
+    <div class="row centered" style= "width: 1710px;">
+        <form action="" method="post" style= "margin-left: 3%;">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <input type="submit" value="Save" class="btn btn-white btn-animate" style= "margin-left: 8.5%;"/>
+        </form>
+    </div>
+</div>
+{% endblock content %}

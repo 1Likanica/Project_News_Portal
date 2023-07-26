@@ -1,3 +1,14 @@
+python -m venv venv
+venv\scripts\activate
+pip install django
+python -m pip install django-filter
+cd newspaper
+python manage.py runserver
+
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+
 Создать двух пользователей (с помощью метода User.objects.create_user('username')).
 
 cd newspaper

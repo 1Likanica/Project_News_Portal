@@ -2,6 +2,8 @@ from django.db import models
 from django.contrib.auth.models import User
 from param import *
 from django.db.models import Sum
+from django.core.validators import MinValueValidator
+from django.urls import reverse
 
 
 class Author(models.Model):
@@ -97,6 +99,12 @@ class Post(models.Model):
     def __str__(self):
         dataf = 'Post from {}'.format(self.dataCreations.strftime('%d.%m.%Y %H:%M'))
         return f"{dataf},{self.author},{self.title}"
+
+    def __str__(self):
+        return f'{self.name.title()}: {self.description[:10]}'
+
+    def get_absolute_url(self):
+        return reverse('post_detail', args=[str(self.id)])
 
 
 class PostCategory(models.Model):
