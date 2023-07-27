@@ -1,5 +1,6 @@
 from django.http import HttpResponseNotFound
 from django.shortcuts import render
+
 from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
 # from django.views.generic.edit import FormView
 from django.views.generic.base import View
@@ -27,7 +28,7 @@ def censor(value):
 
 
 class AuthorsPage(ListView):
-    model = Author  # queryset = Author.objects.all()
+    model = Author
     context_object_name = "Authors"
     template_name = 'news/authors.html'
 
@@ -41,7 +42,7 @@ class PostDetail(View):
 def news_page_list(request):
     """ Представление для вывода страницы с новостями по заданию D3.6 """
 
-    newslist = Post.objects.all().order_by('-rating')[:6]
+    newslist = Post.objects.all().order_by('pk')[:5]
 
     return render(request, 'news/news.html', {'newslist': newslist})
 
@@ -50,11 +51,11 @@ def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
 
-class PostsList(ListView):
+class PostList(ListView):
     model = Post
-    ordering = '-dateCreation'
+    ordering = '-ID'
     template_name = 'news.html'
-    context_object_name = 'news'
+    context_object_name = 'post'
     paginate_by = 5
 
     def get_queryset(self):
@@ -64,8 +65,6 @@ class PostsList(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['time_now'] = datetime.utcnow()
-        context['next_post'] = None
         context['filterset'] = self.filterset
         return context
 
@@ -79,7 +78,6 @@ class PostDetail(DetailView):
         context = super().get_context_data(**kwargs)
         context['time_now'] = datetime.utcnow()
         return context
-# Create your views here.
 
 
 class PostCreate(CreateView):
@@ -98,3 +96,21 @@ class PostDelete(DeleteView):
     model = Post
     template_name = 'post_delete.html'
     success_url = reverse_lazy('news.html')
+
+
+class PostSearch(ListView):
+    model = Post
+    template_name = 'news/search.html'
+    context_object_name = 'search'
+    paginate_by = 5
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        self.filterset = PostFilter(self.request.GET, queryset)
+        return self.filterset.qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # Добавляем в контекст объект фильтрации.
+        context['filterset'] = self.filterset
+        return context

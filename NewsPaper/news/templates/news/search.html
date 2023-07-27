@@ -1,0 +1,155 @@
+{% load static %}
+
+{% block MyCss %}
+<title> Поиск поста </title>
+<link rel="stylesheet" href="{% static 'css/base.css' %}">
+<link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+<link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
+<script
+  src="https://code.jquery.com/jquery-3.6.2.min.js"
+  integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA="
+  crossorigin="anonymous"></script>
+<script src="{% static 'js/bootstrap.min.js' %}"></script>
+{% endblock %}
+
+{% block MyContent %}
+<style>
+.btn:link,
+.btn:visited {
+    text-transform: uppercase;
+    text-decoration: none;
+    padding: 15px 40px;
+    display: inline-block;
+    border-radius: 100px;
+    transition: all .2s;
+    position: absolute;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.btn:active {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+}
+
+.btn-white {
+    background-color: #AFEEEE;
+    color: black;
+}
+
+.btn::after {
+    content: "";
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    border-radius: 100px;
+    position: absolute;
+}
+.table_sort table {
+    border-collapse: collapse;
+}
+.table_sort th {
+    color: #ffebcd;
+    background: #008b8b;
+    cursor: pointer;
+}
+.table_sort td,
+.table_sort th {
+    width: 500px;
+    height: 50px;
+    text-align: center;
+    border: 2px solid #846868;
+}
+.table_sort tbody tr:nth-child(even) {
+    background: #e3e3e3;
+}
+th.sorted[data-order="1"],
+th.sorted[data-order="-1"] {
+    position: relative;
+}
+th.sorted[data-order="1"]::after,
+th.sorted[data-order="-1"]::after {
+    right: 8px;
+    position: absolute;
+}
+th.sorted[data-order="-1"]::after {
+    content: "▼"
+}
+th.sorted[data-order="1"]::after {
+    content: "▲"
+}
+</style>
+<body>
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapseMenu">
+          <span class="icon-bar">Меню</span>
+        </button>
+      </div>
+      <div class="collapse" id="collapseMenu" >
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="http://127.0.0.1:8000/">На Главную</a></li>
+        </ul>
+      </div>
+    </div>
+</div>
+<div class="container">
+  <div class="row centered" style= "width: 1710px;">
+    <div class="col-lg-8 col-lg-offset-2">
+      <h1>Поиск поста</h1>
+    </div>
+  </div>
+</div>
+<div class="container wb">
+    <div class="row centered" style= "width: 1710px;">
+        <br><br>
+        <div class="col-lg-8 col-lg-offset-2">
+            <form action="" method="get">
+                {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
+                {{ filterset.form.as_p }}
+                {# Добавим кнопку отправки данных формы #}
+                <input type="submit" value="Найти" class="btn btn-white btn-animate" style= "margin-left: 8.5%;"/>
+            </form>
+            {% if search %}
+            <table class="table_sort">
+                <thead>
+                    <tr>
+                        <th>ID поста</th>
+                        <th>Дата создания</th>
+                        <th>Статья/Новость</th>
+                        <th>Автор</th>
+                        <th>Рейтинг поста</th>
+                        <th>Заголовок</th>
+                        <th>Текст</th>
+                    </tr>
+                </thead>
+
+                {% for post in search %}
+                <tr>
+<!--                    <td>{{ post.title|truncatechars:10 }}</td>-->
+<!--                    <td>{{ post.time_in|date:'d.M.Y'  }}</td>-->
+<!--                    <td>{{ post.text|truncatechars:20 }}</td>-->
+
+                    <td>{{ post.pk }}</td>
+                    <td>{{ post.dataCreations }}</td>
+                    <td>{{ post.categoryType }}</td>
+                    <td>{{ post.author }}</td>
+                    <td>{{ post.rating }}</td>
+                    <td class="leftAligned"><a href=../post/{{ post.pk }}>{{ post.title }}</a></td>
+                    <td>{{ post.text|truncatechars:20}}</td>
+                </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+               <h2>Публикаций нет!</h2>
+            {% endif %}
+        </div>
+    </div>
+</div>
+</body>
+{% endblock %}
+</html>

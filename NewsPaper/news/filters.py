@@ -14,7 +14,7 @@ class PostFilter(FilterSet):
         }
 
     time_in = DateTimeFilter(
-        field_name='dateCreation',
+        field_name='dataCreations',
         lookup_expr='gt',
         label='Publication date from:',
         widget=DateInput(format='%Y-%m-%d',
