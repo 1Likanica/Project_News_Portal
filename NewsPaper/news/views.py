@@ -11,21 +11,6 @@ from datetime import datetime
 from .forms import PostForm
 from django.urls import reverse_lazy
 
-register = template.Library()
-
-
-@register.filter()
-def censor(value):
-    bad_words = ['Идиот', 'Дурак', 'Дебил', 'Гад']
-
-    if not isinstance(value, str):
-        raise TypeError(f"unresolved type '{type(value)}' expected  type 'str'")
-
-    for word in value.split():
-        if word.lower() in bad_words:
-            value = value.replace(word, f"{word[0]}{'*' * (len(word) - 1)}")
-    return value
-
 
 class AuthorsPage(ListView):
     model = Author
@@ -39,24 +24,12 @@ class PostDetail(View):
         return render(request, "news/posts.html", {'ps':ps})
 
 
-def news_page_list(request):
-    """ Представление для вывода страницы с новостями по заданию D3.6 """
-
-    newslist = Post.objects.all().order_by('pk')[:5]
-
-    return render(request, 'news/news.html', {'newslist': newslist})
-
-
-def pageNotFound(request, exception):
-    return HttpResponseNotFound('<h1>Страница не найдена</h1>')
-
-
 class PostList(ListView):
     model = Post
-    ordering = '-ID'
+    ordering = 'id'
     template_name = 'news.html'
-    context_object_name = 'post'
-    paginate_by = 5
+    context_object_name = 'posts'
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -85,6 +58,17 @@ class PostCreate(CreateView):
     model = Post
     template_name = "post_edit.html"
 
+    def form_valid(self, form):
+        post_n = form.save(commit=False)
+        if self.request.method == 'POST':
+            path_info = self.request.META['PATH_INFO']
+            if path_info == '/news/create/':
+                post_n.categoryType = 'NW'
+            elif path_info == '/article/create/':
+                post_n.categoryType = 'AR'
+            post_n.save()
+        return super().form_valid(form)
+
 
 class PostUpdate(UpdateView):
     form_class = PostForm
@@ -102,7 +86,6 @@ class PostSearch(ListView):
     model = Post
     template_name = 'news/search.html'
     context_object_name = 'search'
-    paginate_by = 5
 
     def get_queryset(self):
         queryset = super().get_queryset()

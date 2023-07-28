@@ -10,11 +10,9 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = [
             'author',
-            'categoryType',
-            # 'rating',
             'title',
-            'text',
             'postCategory',
+            'text',
         ]
 
     def clean(self):

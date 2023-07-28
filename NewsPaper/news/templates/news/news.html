@@ -1,7 +1,12 @@
+
 {% load static %}
 
 {% block MyCss %}
-<title> {{ news.title }}</title>
+
+{% load custom_filters %}
+
+<title> Главная страница </title>
+<link rel="icon" href="{% static 'img/icon.png' %}" sizes="32x32">
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
 <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
@@ -47,7 +52,58 @@ th.sorted[data-order="-1"]::after {
 th.sorted[data-order="1"]::after {
     content: "▲"
 }
+.dropbtn {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
+  margin-left: -5.5%;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+.dropdown-content a:hover {background-color: #ddd;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {background-color: rgb(45,60,60)}
 </style>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+
+    const getSort = ({ target }) => {
+        const order = (target.dataset.order = -(target.dataset.order || -1));
+        const index = [...target.parentNode.cells].indexOf(target);
+        const collator = new Intl.Collator(['en', 'ru'], { numeric: true });
+        const comparator = (index, order) => (a, b) => order * collator.compare(
+            a.children[index].innerHTML,
+            b.children[index].innerHTML
+        );
+
+        for(const tBody of target.closest('table').tBodies)
+            tBody.append(...[...tBody.rows].sort(comparator(index, order)));
+
+        for(const cell of target.parentNode.cells)
+            cell.classList.toggle('sorted', cell === target);
+    };
+
+    document.querySelectorAll('.table_sort thead').forEach(tableTH => tableTH.addEventListener('click', () => getSort(event)));
+
+});
+</script>
 <div class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
     <div class="navbar-header">
@@ -57,10 +113,16 @@ th.sorted[data-order="1"]::after {
     </div>
     <div class="collapse" id="collapseMenu" >
       <ul class="nav navbar-nav navbar-right">
-        <li><a href="https://apps.skillfactory.ru/" target="_blank">Учебная Платформа</a></li>
+        <li><a href="https://apps.skillfactory.ru/" target="_blank">SkillFactory</a></li>
         <li><a href=../authors/>Авторы</a></li>
-        <li><a href="/news/create">Создать пост</a></li>
         <li><a href="/search/">Поиск поста</a></li>
+        <li class="dropdown">
+          <button class="dropbtn"><b style = "font-size: 15px">Создать пост</b></button>
+          <div class="dropdown-content">
+                <a href="/news/create/">Создать новость</a>
+                <a href="/articles/create/">Создать статью</a>
+          </div>
+        </li>
       </ul>
     </div>
   </div>
@@ -69,7 +131,7 @@ th.sorted[data-order="1"]::after {
     <div class="container">
       <div class="row centered" style= "width: 1710px;">
         <div class="col-lg-8 col-lg-offset-2">
-          <h1>Страница списка новостей</h1>
+          <h1>Страница списка постов</h1>
           <h2>Наши рейтинги: </h2>
         </div>
       </div>
@@ -113,49 +175,26 @@ th.sorted[data-order="1"]::after {
               <th>Текст</th>
             </tr>
           </thead>
-              {% for post_n in newslist %}
+              {% for post_n in posts %}
           <tr>
             <td>{{ post_n.pk }}</td>
             <td>{{ post_n.dataCreations }}</td>
             <td>{{ post_n.categoryType }}</td>
             <td>{{ post_n.author }}</td>
             <td>{{ post_n.rating }}</td>
-            <td class="leftAligned"><a href=../post/{{ post_n.pk }}>{{ post_n.title }}</a></td>
-            <td>{{ post_n.text|truncatechars:20}}</td>
+            <td class="leftAligned"><a href=../post/{{ post_n.pk }}>{{ post_n.title|truncatechars:20|censor}}</a></td>
+            <td>{{ post_n.text|truncatechars:20|censor}}</td>
           </tr>
               {% endfor %}
         </table>
         <p><br><br></p>
       </div>
   </div>
-
-<hr />
-  <div id="lg">
-    <div class="container">
-      <div class="row centered" style= "width: 1710px;">
-        <div class="col-lg-2 col-lg-offset-1">
-          <img src=" {% static 'img/c01.png' %}" alt="">
-        </div>
-        <div class="col-lg-2">
-          <img src=" {% static 'img/c02.png' %}" alt="">
-        </div>
-        <div class="col-lg-2">
-          <img src=" {% static 'img/c03.png' %}" alt="">
-        </div>
-        <div class="col-lg-2">
-          <img src=" {% static 'img/c04.jpg' %}" alt="">
-        </div>
-      </div>
-    </div>
-  </div>
-    <br><br>
   <div id="r">
     <div class="container">
       <div class="row centered" style= "width: 1710px;">
         <div class="col-lg-8 col-lg-offset-2">
-
         {# Добавляем пагинацию на страницу #}
-
            {# Информация о предыдущих страницах #}
            {% if page_obj.has_previous %}
                <a href="?page=1">1</a>
@@ -176,10 +215,29 @@ th.sorted[data-order="1"]::after {
                    <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
                {% endif %}
            {% endif %}
-
         </div>
       </div>
     </div>
   </div>
+<hr />
+  <div id="lg">
+    <div class="container">
+      <div class="row centered" style= "width: 1710px;">
+        <div class="col-lg-2 col-lg-offset-1">
+          <img src=" {% static 'img/c01.png' %}" alt="">
+        </div>
+        <div class="col-lg-2">
+          <img src=" {% static 'img/c02.png' %}" alt="">
+        </div>
+        <div class="col-lg-2">
+          <img src=" {% static 'img/c03.png' %}" alt="">
+        </div>
+        <div class="col-lg-2">
+          <img src=" {% static 'img/c04.jpg' %}" alt="">
+        </div>
+      </div>
+    </div>
+  </div>
+    <br><br>
 </div>
 {% endblock %}

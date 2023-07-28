@@ -2,6 +2,7 @@
 
 {% block MyCss %}
 <title> Поиск поста </title>
+<link rel="icon" href="{% static 'img/icon.png' %}" sizes="32x32">
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
 <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
@@ -130,10 +131,6 @@ th.sorted[data-order="1"]::after {
 
                 {% for post in search %}
                 <tr>
-<!--                    <td>{{ post.title|truncatechars:10 }}</td>-->
-<!--                    <td>{{ post.time_in|date:'d.M.Y'  }}</td>-->
-<!--                    <td>{{ post.text|truncatechars:20 }}</td>-->
-
                     <td>{{ post.pk }}</td>
                     <td>{{ post.dataCreations }}</td>
                     <td>{{ post.categoryType }}</td>
@@ -150,6 +147,7 @@ th.sorted[data-order="1"]::after {
         </div>
     </div>
 </div>
+<br>
 </body>
 {% endblock %}
 </html>
