@@ -82,20 +82,63 @@ th.sorted[data-order="-1"]::after {
 th.sorted[data-order="1"]::after {
     content: "▲"
 }
+.dropbtn {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+  border: none;
+  margin-left: -5.5%;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+.dropdown-content a:hover {background-color: #ddd;}
+.dropdown:hover .dropdown-content {display: block;}
+.dropdown:hover .dropbtn {background-color: rgb(45,60,60)}
+.buton {
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: black;
+  background-color: #E0FFFF;
+  border: 2px solid;
+  cursor: pointer;
+}
+.buton:hover {
+    background-color: #7FFFD4;
+    color: black;
+    padding: 10px 22px;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
 </style>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-      <div class="navbar-header">
-         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapseMenu">
-          <span class="icon-bar">Меню</span>
-        </button>
-      </div>
-      <div class="collapse" id="collapseMenu" >
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="http://127.0.0.1:8000/">На Главную</a></li>
-        </ul>
-      </div>
+        <tr class="nav navbar-nav navbar-right">
+            <li><a href="http://127.0.0.1:8000/">На Главную</a></li>
+            <li class="dropdown">
+                <button class="dropbtn"><b style = "font-size: 15px">Создать пост</b></button>
+                <div class="dropdown-content">
+                    <a href="/news/create/">Создать новость</a>
+                    <a href="/articles/create/">Создать статью</a>
+                </div>
+            </li>
+            <li><a href=../authors/>Авторы</a></li>
+        </tr>
     </div>
 </div>
 <div class="container">
@@ -113,7 +156,7 @@ th.sorted[data-order="1"]::after {
                 {# Переменная, которую мы передали через контекст, может сгенерировать нам форму с полями #}
                 {{ filterset.form.as_p }}
                 {# Добавим кнопку отправки данных формы #}
-                <input type="submit" value="Найти" class="btn btn-white btn-animate" style= "margin-left: 8.5%;"/>
+                <input type="submit" value="Найти" class="btn btn-white btn-animate" style= "margin-right: 70%;"/>
             </form>
             {% if search %}
             <table class="table_sort">
@@ -143,6 +186,22 @@ th.sorted[data-order="1"]::after {
             </table>
             {% else %}
                <h2>Публикаций нет!</h2>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row centered" style= "width: 1710px;">
+        <div class="col-lg-8 col-lg-offset-2">
+            {% if request.user.is_authenticated %}
+                <h1>Страница авторизованного пользователя {{request.user.username}}</h1>
+                <a href="{% url 'account_logout' %}"><button class="buton">Выйти</button></a>
+                {% if is_not_author %}
+                    <a href="upgrade/"><button class="buton">Хочу стать автором!</button></a>
+                {% endif %}
+            {% else %}
+                <h1>Вы не вошли в систему!</h1>
+                <a href="{% url 'account_login' %}"><button class="buton">Войти</button></a>
             {% endif %}
         </div>
     </div>

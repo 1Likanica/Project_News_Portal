@@ -1,7 +1,8 @@
 from django import forms
 from .models import Post
 from django.core.exceptions import ValidationError
-
+from allauth.account.forms import SignupForm
+from django.contrib.auth.models import Group
 
 class PostForm(forms.ModelForm):
     text = forms.CharField(min_length=20)
@@ -23,3 +24,12 @@ class PostForm(forms.ModelForm):
             raise ValidationError("Описание не должно быть идентично названию.")
 
         return cleaned_data
+
+
+class BasicSignupForm(SignupForm):
+
+    def save(self, request):
+        user = super(BasicSignupForm, self).save(request)
+        common_group = Group.objects.get(name='common')
+        common_group.user_set.add(user)
+        return user

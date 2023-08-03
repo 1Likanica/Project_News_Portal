@@ -1,15 +1,14 @@
-from django.http import HttpResponseNotFound
-from django.shortcuts import render
-
-from django.views.generic import ListView, DetailView, UpdateView, DeleteView, CreateView
-# from django.views.generic.edit import FormView
+from django.shortcuts import render, redirect
+from django.views.generic import *
 from django.views.generic.base import View
 from .models import *
-from django import template
 from .filters import PostFilter
 from datetime import datetime
 from .forms import PostForm
 from django.urls import reverse_lazy
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import Group
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 
 
 class AuthorsPage(ListView):
@@ -39,6 +38,7 @@ class PostList(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['filterset'] = self.filterset
+        context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
         return context
 
 
@@ -53,7 +53,7 @@ class PostDetail(DetailView):
         return context
 
 
-class PostCreate(CreateView):
+class PostCreate(PermissionRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = "post_edit.html"
@@ -69,8 +69,13 @@ class PostCreate(CreateView):
             post_n.save()
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['is_not_author'] = not self.request.user.groups.filter(name='authors').exists()
+        return context
 
-class PostUpdate(UpdateView):
+
+class PostUpdate(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
@@ -97,3 +102,12 @@ class PostSearch(ListView):
         # Добавляем в контекст объект фильтрации.
         context['filterset'] = self.filterset
         return context
+
+
+@login_required
+def upgrade_me(request):
+    user = request.user
+    authors_group = Group.objects.get(name='authors')
+    if not request.user.groups.filter(name='authors').exists():
+        authors_group.user_set.add(user)
+    return redirect('/news/')

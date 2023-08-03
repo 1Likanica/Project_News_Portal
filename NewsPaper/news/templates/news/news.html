@@ -10,10 +10,7 @@
 <link rel="stylesheet" href="{% static 'css/base.css' %}">
 <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
 <link rel="stylesheet" href="{% static 'css/font-awesome.min.css' %}">
-<script
-  src="https://code.jquery.com/jquery-3.6.2.min.js"
-  integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA="
-  crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.6.2.min.js" integrity="sha256-2krYZKh//PcchRtd+H+VyyQoZ/e3EcrkxhM8ycwASPA=" crossorigin="anonymous"></script>
 <script src="{% static 'js/bootstrap.min.js' %}"></script>
 {% endblock %}
 
@@ -80,6 +77,22 @@ th.sorted[data-order="1"]::after {
 .dropdown-content a:hover {background-color: #ddd;}
 .dropdown:hover .dropdown-content {display: block;}
 .dropdown:hover .dropbtn {background-color: rgb(45,60,60)}
+
+.buton {
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: black;
+  background-color: #E0FFFF;
+  border: 2px solid;
+  cursor: pointer;
+}
+
+.buton:hover {
+    background-color: #7FFFD4;
+    color: black;
+    padding: 10px 22px;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
 </style>
 <script>
   document.addEventListener('DOMContentLoaded', () => {
@@ -106,25 +119,18 @@ th.sorted[data-order="1"]::after {
 </script>
 <div class="navbar navbar-inverse navbar-fixed-top">
   <div class="container">
-    <div class="navbar-header">
-      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapseMenu">
-        <span class="icon-bar">Меню</span>
-      </button>
-    </div>
-    <div class="collapse" id="collapseMenu" >
-      <ul class="nav navbar-nav navbar-right">
-        <li><a href="https://apps.skillfactory.ru/" target="_blank">SkillFactory</a></li>
-        <li><a href=../authors/>Авторы</a></li>
-        <li><a href="/search/">Поиск поста</a></li>
-        <li class="dropdown">
-          <button class="dropbtn"><b style = "font-size: 15px">Создать пост</b></button>
-          <div class="dropdown-content">
-                <a href="/news/create/">Создать новость</a>
-                <a href="/articles/create/">Создать статью</a>
-          </div>
-        </li>
-      </ul>
-    </div>
+    <tr class="nav navbar-nav navbar-right">
+      <li><a href="https://apps.skillfactory.ru/" target="_blank">SkillFactory</a></li>
+      <li><a href=../authors/>Авторы</a></li>
+      <li><a href="/search/">Поиск поста</a></li>
+      <li class="dropdown">
+        <button class="dropbtn"><b style = "font-size: 15px">Создать пост</b></button>
+        <div class="dropdown-content">
+          <a href="/news/create/">Создать новость</a>
+          <a href="/articles/create/">Создать статью</a>
+        </div>
+      </li>
+    </tr>
   </div>
 </div>
   <div id="headerwrap">
@@ -238,6 +244,24 @@ th.sorted[data-order="1"]::after {
       </div>
     </div>
   </div>
-    <br><br>
-</div>
+    <hr />
+    <div class="container">
+      <div class="row centered" style= "width: 1710px;">
+        <div class="col-lg-8 col-lg-offset-2">
+          {% if request.user.is_authenticated %}
+            <h1>Страница авторизованного пользователя {{request.user.username}}</h1>
+            <a href="{% url 'account_logout' %}"><button class="buton">Выйти</button></a>
+            {% if is_not_author %}
+              <a href="upgrade/"><button class="buton">Хочу стать автором!</button></a>
+            {% endif %}
+          {% else %}
+            <h1>Вы не вошли в систему!</h1>
+            <a href="{% url 'account_login' %}"><button class="buton">Войти</button></a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    <hr />
+  </div>
+
 {% endblock %}

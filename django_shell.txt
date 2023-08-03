@@ -1,6 +1,7 @@
 python -m venv venv
 venv\scripts\activate
 pip install django
+pip install django-allauth
 python -m pip install django-filter
 cd newspaper
 python manage.py runserver

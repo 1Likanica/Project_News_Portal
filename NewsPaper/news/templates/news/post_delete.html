@@ -48,20 +48,28 @@
     width: 100%;
     border-radius: 100px;
     position: absolute;
+}
+.buton {
+  padding: 10px 20px;
+  border-radius: 5px;
+  color: black;
+  background-color: #E0FFFF;
+  border: 2px solid;
+  cursor: pointer;
+}
+.buton:hover {
+    background-color: #7FFFD4;
+    color: black;
+    padding: 10px 22px;
+    box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
+}
 </style>
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
-      <div class="navbar-header">
-         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#collapseMenu">
-          <span class="icon-bar">Меню</span>
-        </button>
-      </div>
-      <div class="collapse" id="collapseMenu" >
-        <ul class="nav navbar-nav navbar-right">
-          <li><a href="http://127.0.0.1:8000/">На Главную</a></li>
-          <li><a href="http://127.0.0.1:8000/authors/">Авторы</a></li>
-        </ul>
-      </div>
+        <tr class="nav navbar-nav navbar-right">
+            <li><a href="http://127.0.0.1:8000/">На Главную</a></li>
+            <li><a href="http://127.0.0.1:8000/authors/">Авторы</a></li>
+        </tr>
     </div>
 </div>
 <div id="headerwrap">
@@ -83,6 +91,22 @@
             <p>ID поста: "{{ object.pk }}"</p>
             <input type="submit" value="Delete" class="btn btn-white btn-animate" style= "margin-left: 8.5%;"/>
         </form>
+    </div>
+</div>
+<div class="container">
+    <div class="row centered" style= "width: 1710px;">
+        <div class="col-lg-8 col-lg-offset-2">
+            {% if request.user.is_authenticated %}
+                <h1>Страница авторизованного пользователя {{request.user.username}}</h1>
+                <a href="{% url 'account_logout' %}"><button class="buton">Выйти</button></a>
+                {% if is_not_author %}
+                    <a href="upgrade/"><button class="buton">Хочу стать автором!</button></a>
+                {% endif %}
+            {% else %}
+                <h1>Вы не вошли в систему!</h1>
+                <a href="{% url 'account_login' %}"><button class="buton">Войти</button></a>
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endblock %}

@@ -18,5 +18,7 @@ urlpatterns = [
     path('articles/<int:pk>/delete/', PostDelete.as_view(), name='articles_delete'),
 
     path('search/', PostSearch.as_view(), name='search'),
+
+    path('upgrade/', upgrade_me, name='upgrade'),
 ]
 
