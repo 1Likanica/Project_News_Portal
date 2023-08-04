@@ -19,6 +19,7 @@ urlpatterns = [
 
     path('search/', PostSearch.as_view(), name='search'),
 
+    path('news/upgrade/', upgrade_me, name='upgrade'),
     path('upgrade/', upgrade_me, name='upgrade'),
 ]
 

@@ -4,6 +4,7 @@ from django.core.exceptions import ValidationError
 from allauth.account.forms import SignupForm
 from django.contrib.auth.models import Group
 
+
 class PostForm(forms.ModelForm):
     text = forms.CharField(min_length=20)
 
