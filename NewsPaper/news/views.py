@@ -57,6 +57,7 @@ class PostCreate(PermissionRequiredMixin, CreateView):
     form_class = PostForm
     model = Post
     template_name = "post_edit.html"
+    permission_required = ('news.add_post',)
 
     def form_valid(self, form):
         post_n = form.save(commit=False)
@@ -75,10 +76,11 @@ class PostCreate(PermissionRequiredMixin, CreateView):
         return context
 
 
-class PostUpdate(PermissionRequiredMixin, LoginRequiredMixin, UpdateView):
+class PostUpdate(PermissionRequiredMixin, UpdateView):
     form_class = PostForm
     model = Post
     template_name = 'post_edit.html'
+    permission_required = ('news.change_post', )
 
 
 class PostDelete(DeleteView):
@@ -110,4 +112,5 @@ def upgrade_me(request):
     authors_group = Group.objects.get(name='authors')
     if not request.user.groups.filter(name='authors').exists():
         authors_group.user_set.add(user)
+
     return redirect('/news/')
