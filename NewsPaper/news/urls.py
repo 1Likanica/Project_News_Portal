@@ -1,6 +1,9 @@
 from django.urls import path
 from .views import *
 
+# handler404 = 'news.views.error_404'
+handler403 = 'news.views.error_403'
+
 urlpatterns = [
     path('', PostList.as_view(), name = 'news.html'),
     path('authors/', AuthorsPage.as_view()),
@@ -21,5 +24,6 @@ urlpatterns = [
 
     path('news/upgrade/', upgrade_me, name='upgrade'),
     path('upgrade/', upgrade_me, name='upgrade'),
+
 ]
 

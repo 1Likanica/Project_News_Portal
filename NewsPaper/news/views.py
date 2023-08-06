@@ -109,8 +109,17 @@ class PostSearch(ListView):
 @login_required
 def upgrade_me(request):
     user = request.user
+    Author.objects.create(authorUser=user)
     authors_group = Group.objects.get(name='authors')
     if not request.user.groups.filter(name='authors').exists():
         authors_group.user_set.add(user)
 
     return redirect('/news/')
+
+
+# def error_404(request, exception):
+#     return render(request, 'errors/404.html')
+
+
+def error_403(request, exception):
+    return render(request, 'errors/403.html')
