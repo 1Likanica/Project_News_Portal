@@ -32,7 +32,7 @@ INSTALLED_APPS = [
     'django_filters',
     'django_apscheduler',
 
-    'news',
+    'news.apps.NewsConfig',
     'accounts',
     'sign',
 
@@ -159,6 +159,8 @@ ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
 
 ACCOUNT_FORMS = {'signup': 'news.forms.BasicSignupForm'}
+
+SITE_URL = 'http://127.0.0.1:8000'
 
 MAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
