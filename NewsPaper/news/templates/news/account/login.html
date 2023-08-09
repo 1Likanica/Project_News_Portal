@@ -12,9 +12,8 @@
 {% get_providers as socialaccount_providers %}
 
 {% if socialaccount_providers %}
-<p>{% blocktrans with site.name as site_name %}Please sign in with one
-of your existing third party accounts. Or, <a href="{{ signup_url }}">зарегистрироваться</a>
-for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+<p>{% blocktrans with site.name as site_name %}Пожалуйста, войдите в систему с помощью вашей учетной записи или через Google. Если аккаунта нет, то  <a href="{{ signup_url }}">зарегистрируйтесь</a>
+в {{ site_name }} и войдите в систему ниже:{% endblocktrans %}</p>
 
 <div class="socialaccount_ballot">
 

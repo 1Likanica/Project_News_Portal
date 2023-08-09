@@ -169,6 +169,7 @@ th.sorted[data-order="1"]::after {
                         <th>Рейтинг поста</th>
                         <th>Заголовок</th>
                         <th>Текст</th>
+                        <th>Категория</th>
                     </tr>
                 </thead>
 
@@ -181,6 +182,9 @@ th.sorted[data-order="1"]::after {
                     <td>{{ post.rating }}</td>
                     <td class="leftAligned"><a href=../post/{{ post.pk }}>{{ post.title }}</a></td>
                     <td>{{ post.text|truncatechars:20}}</td>
+                    <td>{% for category in post_n.postCategory.all %}
+                            {{ category }}
+                        {% endfor %}</td>
                 </tr>
                 {% endfor %}
             </table>

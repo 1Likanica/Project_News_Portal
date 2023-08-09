@@ -90,7 +90,6 @@ th.sorted[data-order="1"]::after {
 .buton:hover {
     background-color: #7FFFD4;
     color: black;
-    padding: 10px 22px;
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
 </style>
@@ -163,12 +162,15 @@ th.sorted[data-order="1"]::after {
       </div>
     </div>
   </div>
-
   <div class="container wb">
     <div class="row centered" style= "width: 1710px;">
       <br><br>
       <div class="col-lg-8 col-lg-offset-2">
         <h4>Список новостей</h4>
+        {% if is_not_subscriber %}
+        <button class ="buton"><a href = "{% url 'subscribe' category.id %}">Подписаться</a></button>
+        {% endif %}
+        <br><br>
         <table class="table_sort">
           <thead>
             <tr>
@@ -182,7 +184,7 @@ th.sorted[data-order="1"]::after {
               <th>Категория</th>
             </tr>
           </thead>
-              {% for post_n in posts %}
+              {% for post_n in category_news_list %}
           <tr>
             <td>{{ post_n.pk }}</td>
             <td>{{ post_n.dataCreations }}</td>
@@ -193,41 +195,13 @@ th.sorted[data-order="1"]::after {
             <td>{{ post_n.text|truncatechars:20|censor}}</td>
             <td>{% for category in post_n.postCategory.all %}
                   <a href = "{% url 'category_list' category.id %}">{{ category }}</a>
-                {% endfor %}</td>
+                {% endfor %}
+            </td>
           </tr>
               {% endfor %}
         </table>
         <p><br><br></p>
       </div>
-  </div>
-  <div id="r">
-    <div class="container">
-      <div class="row centered" style= "width: 1710px;">
-        <div class="col-lg-8 col-lg-offset-2">
-        {# Добавляем пагинацию на страницу #}
-           {# Информация о предыдущих страницах #}
-           {% if page_obj.has_previous %}
-               <a href="?page=1">1</a>
-               {% if page_obj.previous_page_number != 1 %}
-                   ...
-                   <a href="?page={{ page_obj.previous_page_number }}">{{ page_obj.previous_page_number }}</a>
-               {% endif %}
-           {% endif %}
-
-           {# Информация о текущей странице #}
-           {{ page_obj.number }}
-
-           {# Информация о следующих страницах #}
-           {% if page_obj.has_next %}
-               <a href="?page={{ page_obj.next_page_number }}">{{ page_obj.next_page_number }}</a>
-               {% if paginator.num_pages != page_obj.next_page_number %}
-                   ...
-                   <a href="?page={{ page_obj.paginator.num_pages }}">{{ page_obj.paginator.num_pages }}</a>
-               {% endif %}
-           {% endif %}
-        </div>
-      </div>
-    </div>
   </div>
 <hr />
   <div id="lg">
