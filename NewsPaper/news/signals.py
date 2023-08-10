@@ -23,7 +23,7 @@ def send_notifications(preview, pk, title, subscribers):
     msg.send()
 @receiver(m2m_changed, sender=PostCategory)
 def notify_about_new_post(sender, instance, **kwargs):
-    if kwargs['action'] == 'post_edit':
+    if kwargs['action'] == 'post_add':
         categories = instance.category.all()
         subscribers: list[str] = []
         for category in categories:
