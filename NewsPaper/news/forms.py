@@ -1,4 +1,8 @@
 from django import forms
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+from django.conf import settings
+
 from .models import Post
 from django.core.exceptions import ValidationError
 from allauth.account.forms import SignupForm
