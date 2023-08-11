@@ -184,7 +184,8 @@ th.sorted[data-order="1"]::after {
                     <td>{{ post.text|truncatechars:20}}</td>
                     <td>{% for category in post_n.postCategory.all %}
                             {{ category }}
-                        {% endfor %}</td>
+                        {% endfor %}
+                    </td>
                 </tr>
                 {% endfor %}
             </table>

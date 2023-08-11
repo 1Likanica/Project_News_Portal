@@ -7,6 +7,9 @@ python -m pip install django-filter
 cd newspaper
 python manage.py runserver
 
+В соседнем терминале
+python manage.py runapscheduler
+
 python manage.py makemigrations
 python manage.py migrate
 python manage.py runserver

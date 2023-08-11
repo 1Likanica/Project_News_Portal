@@ -162,9 +162,19 @@ ACCOUNT_FORMS = {'signup': 'news.forms.BasicSignupForm'}
 
 SITE_URL = 'http://127.0.0.1:8000'
 
-MAIL_HOST = 'smtp.yandex.ru'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_HOST = 'smtp.yandex.ru'
 EMAIL_PORT = 465
-EMAIL_HOST_USER = 'Pigeon135'
-EMAIL_HOST_PASSWORD = 'GitHub!135'
 EMAIL_USE_SSL = True
-DEFAULT_FROM_EMAIL = 'pigeon135@yandex.ru'
+
+EMAIL_HOST_USER = 'pigeon135@yandex.ru'
+EMAIL_HOST_PASSWORD = 'wpwesoawgndvsbww'
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_ADMIN = EMAIL_HOST_USER
+
+APSCHEDULER_DATETIME_FORMAT = "N j, Y, f:s a"
+
+APSCHEDULER_RUN_NOW_TIMEOUT = 25  # Seconds
