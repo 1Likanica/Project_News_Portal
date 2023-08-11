@@ -182,7 +182,7 @@ th.sorted[data-order="1"]::after {
                     <td>{{ post.rating }}</td>
                     <td class="leftAligned"><a href=../post/{{ post.pk }}>{{ post.title }}</a></td>
                     <td>{{ post.text|truncatechars:20}}</td>
-                    <td>{% for category in post_n.postCategory.all %}
+                    <td>{% for category in post.postCategory.all %}
                             {{ category }}
                         {% endfor %}
                     </td>

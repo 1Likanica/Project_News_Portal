@@ -59,6 +59,12 @@
     padding: 10px 22px;
     box-shadow: 0 12px 16px 0 rgba(0,0,0,0.24), 0 17px 50px 0 rgba(0,0,0,0.19);
 }
+input {
+    border-radius: 0.25rem
+}
+#id_text {
+    width: 1000px;
+}
 </style>
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
@@ -84,7 +90,7 @@
         <form action="" method="post" style= "margin-left: 3%;">
             {% csrf_token %}
             {{ form.as_p }}
-            <input type="submit" value="Сохранить" class="btn btn-white btn-animate" style= "margin-left: 8.5%;"/>
+            <input type="submit" value="Сохранить" class="btn btn-white btn-animate" style= "margin-left: -60%;"/>
         </form>
     </div>
 </div>
