@@ -1,11 +1,11 @@
 from django.urls import path
 from .views import *
+from django.views.decorators.cache import cache_page
 
-# handler404 = 'news.views.error_404'
 handler403 = 'news.views.error_403'
 
 urlpatterns = [
-    path('', PostList.as_view(), name = 'news.html'),
+    path('', cache_page(60)(PostList.as_view()), name = 'news.html'),
     path('authors/', AuthorsPage.as_view()),
 
     path('post/<int:pk>/', PostDetail.as_view(), name='post_detail'),
