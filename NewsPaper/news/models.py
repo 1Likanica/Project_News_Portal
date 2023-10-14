@@ -5,7 +5,8 @@ from django.db.models import Sum
 from django.core.validators import MinValueValidator
 from django.urls import reverse
 from django.core.cache import cache
-
+from django.utils.translation import gettext as _
+from django.utils.translation import pgettext_lazy # импортируем «ленивый» геттекст с подсказкой
 
 class Author(models.Model):
     """

@@ -61,3 +61,7 @@ msgstr "Enter the data"
 #: .\news\templates\news\account\signup.html:18
 msgid "Зарегистрироваться"
 msgstr "Register"
+
+#: .\news\templates\news\news.html:164
+msgid "Список новостей"
+msgstr "News List"

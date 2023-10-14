@@ -5,7 +5,7 @@ from django.views.decorators.cache import cache_page
 handler403 = 'news.views.error_403'
 
 urlpatterns = [
-    path('', cache_page(60)(PostList.as_view()), name = 'news.html'),
+    path('', PostList.as_view(), name = 'news.html'),
     path('authors/', AuthorsPage.as_view()),
 
     path('post/<int:pk>/', PostDetail.as_view(), name='post_detail'),

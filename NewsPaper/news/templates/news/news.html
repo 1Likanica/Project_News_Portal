@@ -1,4 +1,4 @@
-
+{% load i18n %}
 {% load static %}
 
 {% block MyCss %}
@@ -142,11 +142,26 @@ th.sorted[data-order="1"]::after {
     </div>
   </div>
 </div>
+<form action="{% url 'set_language' %}" method="POST" style="margin-left:43%"> {% csrf_token %} <!-- Не забываем по csrf_token для POST запросов -->
+        <input type="hidden" name="next" value="{{ redirect_to }}">
+
+        <select name="language" id="">
+            {% get_available_languages as LANGUAGES %} <!-- получаем языки -->
+            {% get_language_info_list for LANGUAGES as languages %} <!-- Помещаем их в список languages -->
+
+            {% for language in languages %} <!-- Итерируясь по списку, выводим их название на языке пользователя и код -->
+                <option value="{{ language.code }}" {% if language.code == LANGUAGE_CODE %} selected {% endif %}>
+                    {{ language.name_local }} - {{ language.code }}
+                </option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="set">
+</form>
   <div class="container wb">
     <div class="row centered" style= "width: 1710px;">
       <br><br>
       <div class="col-lg-8 col-lg-offset-2">
-        <h4>Список новостей</h4>
+        <h4> {% trans "Список новостей" %}</h4>
         <table class="table_sort">
           <thead>
             <tr>
