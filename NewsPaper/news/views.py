@@ -1,3 +1,4 @@
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import *
 from django.views.generic.base import View
@@ -10,7 +11,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache # импортируем наш кэш
-
+import pytz #  импортируем стандартный модуль для работы с часовыми поясами
+from django.utils import timezone
 
 class AuthorsPage(ListView):
     model = Author
@@ -160,3 +162,24 @@ def subscribe(request, pk):
 
     message = 'Вы успешно подписались на рассылку новостей категории'
     return render(request, 'news/subscribe.html', {'category': category, 'message': message})
+
+
+class Index(View):
+    def get(self, request):
+        curent_time = timezone.now()
+
+        # .  Translators: This message appears on the home page only
+        models = Category.objects.all()
+
+        context = {
+            'models': models,
+            'current_time': timezone.now(),
+            'timezones': pytz.common_timezones  # добавляем в контекст все доступные часовые пояса
+        }
+
+        return HttpResponse(render(request, 'index.html', context))
+
+    #  по пост-запросу будем добавлять в сессию часовой пояс, который и будет обрабатываться написанным нами ранее middleware
+    def post(self, request):
+        request.session['django_timezone'] = request.POST['timezone']
+        return redirect('/')

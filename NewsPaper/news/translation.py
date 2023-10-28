@@ -1,4 +1,4 @@
-from news.models import Category
+from .models import Category
 from modeltranslation.translator import register, \
     TranslationOptions  # импортируем декоратор для перевода и класс настроек, от которого будем наследоваться
 
